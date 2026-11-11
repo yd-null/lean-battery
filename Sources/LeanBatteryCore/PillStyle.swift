@@ -84,8 +84,8 @@ public struct PillMetrics: Equatable, Sendable {
 			height = 42
 			minimumWidth = notchWidth + Self.notchSideMargin
 			maximumWidth = notchWidth + Self.notchSideMargin + Self.notchGrowth
-			iconWidth = 10
 			iconHeight = 20
+			iconWidth = iconHeight * Double(IconRenderer.size.width / IconRenderer.size.height)
 			titleFontSize = 12.5
 			detailFontSize = 11
 			horizontalPadding = 18
@@ -101,10 +101,10 @@ public struct PillMetrics: Equatable, Sendable {
 		height = 46 * scale
 		minimumWidth = 240 * scale
 		maximumWidth = 400 * scale
-		// The glyph is rendered at 11 x 22 pt (1x and 2x), so drawing it any larger upscales that bitmap
+		// The glyph is rendered at 14 x 22 pt (1x and 2x), so drawing it any larger upscales that bitmap
 		// and softens it. Small shrinks it; Large keeps it at native size and grows only the text and box.
-		iconWidth = min(11 * scale, 11)
-		iconHeight = iconWidth * 2
+		iconWidth = Double(IconRenderer.size.width) * min(scale, 1)
+		iconHeight = Double(IconRenderer.size.height) * min(scale, 1)
 		titleFontSize = 13 * scale
 		detailFontSize = 11.5 * scale
 		horizontalPadding = 22 * scale

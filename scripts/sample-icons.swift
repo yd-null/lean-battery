@@ -11,6 +11,7 @@ let exportScale: CGFloat = 8
 /// Sample states, one per documented battery stage.
 let samples: [(name: String, state: BatteryState)] = [
 	("discharging", BatteryState(percent: 78)),
+	("full", BatteryState(percent: 100)),
 	("charging", BatteryState(percent: 64, isCharging: true, isPluggedIn: true)),
 	("low-battery", BatteryState(percent: 12)),
 	("high-temperature", BatteryState(percent: 63, temperatureCelsius: 44, isHot: true)),

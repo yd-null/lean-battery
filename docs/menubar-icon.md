@@ -1,27 +1,28 @@
 # Menubar Icon
 
-LeanBattery's menubar item is an upright battery, 11 × 22 pt, drawn in code (no image assets).
+LeanBattery's menubar item in this fork is an upright battery, 14 × 22 pt, drawn in code (no image assets).
 
 ## States
 
 | State | Inside the battery | Fill |
 |---|---|---|
-| On battery | charge % (9pt SF semibold compressed; 6.6pt at 100) | white/black per menubar at 28% opacity, red at ≤ 20% |
+| On battery | charge % (9pt SF semibold condensed; 6.6pt at 100) | white/black per menubar at 28% opacity, red at ≤ 20% |
 | Charging | plug | green `#30D158` at 60% opacity |
 | Plugged in, not charging | plug | white/black per menubar at 28% opacity |
 | Low Power Mode | % (plug if plugged in) | yellow `#FFD60A` at 60% opacity (wins over other colors) |
 | Temperature ≥ threshold | unchanged | unchanged + red dot top-right |
 | No battery data (desktop Mac, or before macOS reports power at login) | "—" text instead of the battery | — |
 
-The fill is translucent and the % or plug is always drawn in one solid color (white on a dark menubar, black on a light one) on top of it, so digits stay whole and readable at any charge level. Digits use SF compressed so two digits fit the 8.3pt interior without touching the frame.
+The fill is translucent and the % or plug is always drawn in one solid color (white on a dark menubar, black on a light one) on top of it, so digits stay whole and readable at any charge level. Digits use SF semibold condensed to make use of the wider 11.3pt interior. Text-layout tests verify that all percentages from 0 through 100 fit.
 
 ## Sample images
 
-`docs/assets/menubar-*.png` are transparent 88 × 176 px renders (8× the 11 × 22 pt icon) for use in the README or on the web. Each stage has a dark-menubar version (white outline) and a `-light` version (black outline) for light backgrounds.
+`docs/assets/menubar-*.png` are transparent 112 × 176 px renders (8× the 14 × 22 pt icon) for use in the README or on the web. Each stage has a dark-menubar version (white outline) and a `-light` version (black outline) for light backgrounds.
 
 | Stage | Dark background | Light background |
 |---|---|---|
 | Discharging | `menubar-discharging.png` | `menubar-discharging-light.png` |
+| Full, on battery | `menubar-full.png` | `menubar-full-light.png` |
 | Charging | `menubar-charging.png` | `menubar-charging-light.png` |
 | Low battery | `menubar-low-battery.png` | `menubar-low-battery-light.png` |
 | High temperature | `menubar-high-temperature.png` | `menubar-high-temperature-light.png` |

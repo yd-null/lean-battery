@@ -28,7 +28,7 @@ Four choices for how the pill is drawn:
 |---|---|
 | Small | The default capsule at 0.85× — text, icon, padding and width all scale together |
 
-Title and detail are centred, with the icon and text set in from the body's edges. The battery glyph is rendered at 11 × 22 pt, so that is the largest it is ever drawn: Small shrinks it, and Large grows the text and the box but leaves the glyph at native size rather than upscaling a bitmap.
+Title and detail are centred, with the icon and text set in from the body's edges. The battery glyph is rendered at 14 × 22 pt, so that is the largest it is ever drawn: Small shrinks it, and Large grows the text and the box but leaves the glyph at native size rather than upscaling a bitmap.
 
 | Default | The standard floating capsule |
 | Large | The same capsule at 1.2× |

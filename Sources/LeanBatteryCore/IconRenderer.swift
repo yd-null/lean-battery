@@ -5,19 +5,19 @@ import Foundation
 /// Draws the upright battery icon (spec §4.1) into a transparent bitmap.
 public enum IconRenderer {
 	/// Icon canvas in points.
-	public static let size = CGSize(width: 11, height: 22)
+	public static let size = CGSize(width: 14, height: 22)
 
-	private static let cap = CGRect(x: 3.5, y: 0.4, width: 4.0, height: 1.6)
-	private static let body = CGRect(x: 0.45, y: 2.2, width: 10.1, height: 19.4)
+	private static let cap = CGRect(x: 5.0, y: 0.4, width: 4.0, height: 1.6)
+	private static let body = CGRect(x: 0.45, y: 2.2, width: 13.1, height: 19.4)
 	private static let bodyStrokeWidth = 0.9
-	private static let inner = CGRect(x: 1.35, y: 3.1, width: 8.3, height: 17.6)
-	private static let badgeCenter = CGPoint(x: 8.9, y: 2.3)
+	static let inner = CGRect(x: 1.35, y: 3.1, width: 11.3, height: 17.6)
+	private static let badgeCenter = CGPoint(x: 11.9, y: 2.3)
 	/// Fill opacities: soft enough that a solid glyph drawn on top stays readable.
 	private static let foregroundFillAlpha = 0.28
 	private static let colorFillAlpha = 0.6
-	/// Core Text trait values for SF semibold compressed (raw values of NSFont.Weight.semibold / NSFont.Width.compressed).
+	/// SF semibold condensed keeps digits broader than the original compressed face.
 	private static let numberWeightTrait = 0.3
-	private static let numberWidthTrait = -0.3
+	private static let numberWidthTrait = -0.1
 	private static let plugScale = 1.3
 
 	/// Renders `spec` at `scale` (1 or 2 for menubar use). `foregroundIsWhite` follows the menubar appearance.
@@ -38,7 +38,7 @@ public enum IconRenderer {
 		return context.makeImage()
 	}
 
-	/// Draws into a context whose user space is 11 × 22 pt with a top-left origin.
+	/// Draws into a context whose user space is 14 × 22 pt with a top-left origin.
 	static func draw(_ spec: IconSpec, foreground: CGColor, in context: CGContext) {
 		context.setFillColor(foreground)
 		context.addPath(roundedRect(cap, radius: 0.6))
@@ -88,12 +88,7 @@ public enum IconRenderer {
 			context.fillPath()
 		case .number(let value):
 			let font = numberFont(size: CGFloat(spec.numberFontSize))
-			let attributes: [NSAttributedString.Key: Any] = [
-				NSAttributedString.Key(kCTFontAttributeName as String): font,
-				NSAttributedString.Key(kCTKernAttributeName as String): -0.3,
-				NSAttributedString.Key(kCTForegroundColorFromContextAttributeName as String): true,
-			]
-			let line = CTLineCreateWithAttributedString(NSAttributedString(string: String(value), attributes: attributes))
+			let line = numberLine(value: value, font: font)
 			let width = CTLineGetTypographicBounds(line, nil, nil, nil)
 			context.saveGState()
 			// Undo the flipped CTM for text so glyphs are upright; center the cap height vertically.
@@ -104,12 +99,22 @@ public enum IconRenderer {
 		}
 	}
 
-	/// SF semibold compressed at `size`, built from Core Text traits so the core library needs no AppKit.
-	private static func numberFont(size: CGFloat) -> CTFont {
+	/// SF semibold condensed at `size`, built from Core Text traits so the core library needs no AppKit.
+	static func numberFont(size: CGFloat) -> CTFont {
 		let base = CTFontCreateUIFontForLanguage(.system, size, nil) ?? CTFontCreateWithName("Helvetica" as CFString, size, nil)
 		let traits: [CFString: Any] = [kCTFontWeightTrait: numberWeightTrait, kCTFontWidthTrait: numberWidthTrait]
 		let descriptor = CTFontDescriptorCreateCopyWithAttributes(CTFontCopyFontDescriptor(base), [kCTFontTraitsAttribute: traits] as CFDictionary)
 		return CTFontCreateWithFontDescriptor(descriptor, size, nil)
+	}
+
+	/// Shared text layout so tests can check every percentage against the actual drawing area.
+	static func numberLine(value: Int, font: CTFont) -> CTLine {
+		let attributes: [NSAttributedString.Key: Any] = [
+			NSAttributedString.Key(kCTFontAttributeName as String): font,
+			NSAttributedString.Key(kCTKernAttributeName as String): -0.3,
+			NSAttributedString.Key(kCTForegroundColorFromContextAttributeName as String): true,
+		]
+		return CTLineCreateWithAttributedString(NSAttributedString(string: String(value), attributes: attributes))
 	}
 
 	/// Maps a fill role to its translucent fill color.

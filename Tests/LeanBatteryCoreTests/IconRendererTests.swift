@@ -1,4 +1,5 @@
 import CoreGraphics
+import CoreText
 import Testing
 @testable import LeanBatteryCore
 
@@ -46,7 +47,7 @@ private func render(_ state: BatteryState) throws -> Pixels {
 @Suite struct IconRendererTests {
 	@Test func rendersAtRequestedScale() throws {
 		let image = try #require(IconRenderer.render(IconSpec(state: BatteryState(percent: 57)), foregroundIsWhite: true, scale: 2))
-		#expect(image.width == 22)
+		#expect(image.width == 28)
 		#expect(image.height == 44)
 	}
 
@@ -73,23 +74,39 @@ private func render(_ state: BatteryState) throws -> Pixels {
 
 	@Test func numberIsSolidOverFillWithoutGaps() throws {
 		// At 88% the whole glyph area is inside the fill: digits solid white, nothing cut out.
-		let glyphArea = try render(BatteryState(percent: 88)).region(x: 2...9, y: 9...15)
+		let glyphArea = try render(BatteryState(percent: 88)).region(x: 3.5...10.5, y: 9...15)
 		#expect(glyphArea.contains { $0 == [255, 255, 255, 255] })
 		#expect(!glyphArea.contains { $0[3] == 0 })
 	}
 
 	@Test func plugIsSolidInsideFill() throws {
-		// (5.5, 15.0) is on the plug's cord, below where a "100" would sit.
-		#expect(try render(BatteryState(percent: 100, isPluggedIn: true)).at(5.5, 15.0) == [255, 255, 255, 255])
-		#expect(try render(BatteryState(percent: 100)).at(5.5, 15.0)[3] < 255)
+		// (7, 15.0) is on the plug's cord, below where a "100" would sit.
+		#expect(try render(BatteryState(percent: 100, isPluggedIn: true)).at(7, 15.0) == [255, 255, 255, 255])
+		#expect(try render(BatteryState(percent: 100)).at(7, 15.0)[3] < 255)
 	}
 
 	@Test func hotBadgeIsRedWithTransparentRing() throws {
 		let hot = try render(BatteryState(percent: 57, isHot: true))
-		let badge = hot.at(8.9, 2.3)
+		let badge = hot.at(11.9, 2.3)
 		#expect(badge[0] > 220 && badge[1] < 100 && badge[3] == 255)
-		// (10.3, 4.3) is on the body's rounded corner stroke, 2.4–2.7pt from the badge center: inside the cleared ring.
-		#expect(hot.at(10.3, 4.3)[3] == 0)
-		#expect(try render(BatteryState(percent: 57)).at(10.3, 4.3)[3] == 255)
+		// (13.3, 4.3) is on the body's rounded corner stroke, 2.4–2.7pt from the badge center: inside the cleared ring.
+		#expect(hot.at(13.3, 4.3)[3] == 0)
+		#expect(try render(BatteryState(percent: 57)).at(13.3, 4.3)[3] == 255)
+	}
+
+	@Test(arguments: 0...100)
+	func everyPercentageFitsTheWiderInterior(percent: Int) {
+		let spec = IconSpec(state: BatteryState(percent: percent))
+		let font = IconRenderer.numberFont(size: spec.numberFontSize)
+		let line = IconRenderer.numberLine(value: percent, font: font)
+		let width = CTLineGetTypographicBounds(line, nil, nil, nil)
+		#expect(width <= IconRenderer.inner.width)
+	}
+
+	@Test(arguments: [1.0, 2.0])
+	func preservesNativeHeightAtEachScale(scale: Double) throws {
+		let image = try #require(IconRenderer.render(IconSpec(state: BatteryState(percent: 100)), foregroundIsWhite: true, scale: scale))
+		#expect(image.width == Int(14 * scale))
+		#expect(image.height == Int(22 * scale))
 	}
 }
