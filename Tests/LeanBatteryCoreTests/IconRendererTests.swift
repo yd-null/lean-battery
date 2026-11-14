@@ -47,8 +47,8 @@ private func render(_ state: BatteryState) throws -> Pixels {
 @Suite struct IconRendererTests {
 	@Test func rendersAtRequestedScale() throws {
 		let image = try #require(IconRenderer.render(IconSpec(state: BatteryState(percent: 57)), foregroundIsWhite: true, scale: 2))
-		#expect(image.width == 28)
-		#expect(image.height == 44)
+		#expect(image.width == 32)
+		#expect(image.height == 40)
 	}
 
 	@Test func bodyStrokeIsForeground() throws {
@@ -60,38 +60,45 @@ private func render(_ state: BatteryState) throws -> Pixels {
 	}
 
 	@Test func foregroundFillIsTranslucent() throws {
-		// (3, 19) is inside the fill, below the number; 28% alpha ≈ 71.
-		let pixel = try render(BatteryState(percent: 50)).at(3, 19)
+		// (3, 17) is inside the fill, below the number; 28% alpha ≈ 71.
+		let pixel = try render(BatteryState(percent: 50)).at(3, 17)
 		#expect((60...85).contains(pixel[3]))
 	}
 
 	@Test func chargingFillIsTranslucentGreen() throws {
 		// 60% alpha ≈ 153; premultiplied green channel dominates.
-		let pixel = try render(BatteryState(percent: 50, isCharging: true, isPluggedIn: true)).at(3, 19)
+		let pixel = try render(BatteryState(percent: 50, isCharging: true, isPluggedIn: true)).at(3, 17)
 		#expect((140...165).contains(pixel[3]))
 		#expect(pixel[1] > pixel[0] && pixel[1] > pixel[2])
 	}
 
 	@Test func numberIsSolidOverFillWithoutGaps() throws {
 		// At 88% the whole glyph area is inside the fill: digits solid white, nothing cut out.
-		let glyphArea = try render(BatteryState(percent: 88)).region(x: 3.5...10.5, y: 9...15)
+		let glyphArea = try render(BatteryState(percent: 88)).region(x: 2.5...13.5, y: 7...15)
 		#expect(glyphArea.contains { $0 == [255, 255, 255, 255] })
 		#expect(!glyphArea.contains { $0[3] == 0 })
 	}
 
 	@Test func plugIsSolidInsideFill() throws {
-		// (7, 15.0) is on the plug's cord, below where a "100" would sit.
-		#expect(try render(BatteryState(percent: 100, isPluggedIn: true)).at(7, 15.0) == [255, 255, 255, 255])
-		#expect(try render(BatteryState(percent: 100)).at(7, 15.0)[3] < 255)
+		// (8, 14.0) is on the plug's cord, below where a "100" would sit.
+		#expect(try render(BatteryState(percent: 100, isPluggedIn: true)).at(8, 14.0) == [255, 255, 255, 255])
+		#expect(try render(BatteryState(percent: 100)).at(8, 14.0)[3] < 255)
 	}
 
 	@Test func hotBadgeIsRedWithTransparentRing() throws {
 		let hot = try render(BatteryState(percent: 57, isHot: true))
-		let badge = hot.at(11.9, 2.3)
+		let badge = hot.at(13.9, 2.3)
 		#expect(badge[0] > 220 && badge[1] < 100 && badge[3] == 255)
-		// (13.3, 4.3) is on the body's rounded corner stroke, 2.4–2.7pt from the badge center: inside the cleared ring.
-		#expect(hot.at(13.3, 4.3)[3] == 0)
-		#expect(try render(BatteryState(percent: 57)).at(13.3, 4.3)[3] == 255)
+		// (15.3, 4.3) is on the body's rounded corner stroke, inside the cleared ring.
+		#expect(hot.at(15.3, 4.3)[3] == 0)
+		#expect(try render(BatteryState(percent: 57)).at(15.3, 4.3)[3] == 255)
+	}
+
+	@Test func twoTopTerminalsHaveATransparentGap() throws {
+		let pixels = try render(BatteryState(percent: 57))
+		#expect(pixels.at(4.5, 1) == [255, 255, 255, 255])
+		#expect(pixels.at(11.5, 1) == [255, 255, 255, 255])
+		#expect(pixels.at(8, 1)[3] == 0)
 	}
 
 	@Test(arguments: 0...100)
@@ -101,12 +108,13 @@ private func render(_ state: BatteryState) throws -> Pixels {
 		let line = IconRenderer.numberLine(value: percent, font: font)
 		let width = CTLineGetTypographicBounds(line, nil, nil, nil)
 		#expect(width <= IconRenderer.inner.width)
+		#expect(CTFontGetCapHeight(font) <= IconRenderer.inner.height)
 	}
 
 	@Test(arguments: [1.0, 2.0])
-	func preservesNativeHeightAtEachScale(scale: Double) throws {
+	func rendersNewDimensionsAtEachScale(scale: Double) throws {
 		let image = try #require(IconRenderer.render(IconSpec(state: BatteryState(percent: 100)), foregroundIsWhite: true, scale: scale))
-		#expect(image.width == Int(14 * scale))
-		#expect(image.height == Int(22 * scale))
+		#expect(image.width == Int(16 * scale))
+		#expect(image.height == Int(20 * scale))
 	}
 }

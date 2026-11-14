@@ -5,13 +5,16 @@ import Foundation
 /// Draws the upright battery icon (spec §4.1) into a transparent bitmap.
 public enum IconRenderer {
 	/// Icon canvas in points.
-	public static let size = CGSize(width: 14, height: 22)
+	public static let size = CGSize(width: 16, height: 20)
 
-	private static let cap = CGRect(x: 5.0, y: 0.4, width: 4.0, height: 1.6)
-	private static let body = CGRect(x: 0.45, y: 2.2, width: 13.1, height: 19.4)
+	private static let terminals = [
+		CGRect(x: 3.0, y: 0.4, width: 3.0, height: 1.6),
+		CGRect(x: 10.0, y: 0.4, width: 3.0, height: 1.6),
+	]
+	private static let body = CGRect(x: 0.45, y: 2.2, width: 15.1, height: 17.4)
 	private static let bodyStrokeWidth = 0.9
-	static let inner = CGRect(x: 1.35, y: 3.1, width: 11.3, height: 17.6)
-	private static let badgeCenter = CGPoint(x: 11.9, y: 2.3)
+	static let inner = CGRect(x: 1.35, y: 3.1, width: 13.3, height: 15.6)
+	private static let badgeCenter = CGPoint(x: 13.9, y: 2.3)
 	/// Fill opacities: soft enough that a solid glyph drawn on top stays readable.
 	private static let foregroundFillAlpha = 0.28
 	private static let colorFillAlpha = 0.6
@@ -38,10 +41,12 @@ public enum IconRenderer {
 		return context.makeImage()
 	}
 
-	/// Draws into a context whose user space is 14 × 22 pt with a top-left origin.
+	/// Draws into a context whose user space is 16 × 20 pt with a top-left origin.
 	static func draw(_ spec: IconSpec, foreground: CGColor, in context: CGContext) {
 		context.setFillColor(foreground)
-		context.addPath(roundedRect(cap, radius: 0.6))
+		for terminal in terminals {
+			context.addPath(roundedRect(terminal, radius: 0.6))
+		}
 		context.fillPath()
 
 		context.setStrokeColor(foreground)

@@ -43,7 +43,7 @@ public struct PillMetrics: Equatable, Sendable {
 	public var minimumWidth: Double
 	/// Widest the body may grow before its text truncates.
 	public var maximumWidth: Double
-	/// Battery glyph width; the glyph is always twice as tall as it is wide.
+	/// Battery glyph width, preserving the renderer's aspect ratio.
 	public var iconWidth: Double
 	/// Battery glyph height.
 	public var iconHeight: Double
@@ -101,7 +101,7 @@ public struct PillMetrics: Equatable, Sendable {
 		height = 46 * scale
 		minimumWidth = 240 * scale
 		maximumWidth = 400 * scale
-		// The glyph is rendered at 14 x 22 pt (1x and 2x), so drawing it any larger upscales that bitmap
+		// The glyph is rendered at 16 x 20 pt (1x and 2x), so drawing it any larger upscales that bitmap
 		// and softens it. Small shrinks it; Large keeps it at native size and grows only the text and box.
 		iconWidth = Double(IconRenderer.size.width) * min(scale, 1)
 		iconHeight = Double(IconRenderer.size.height) * min(scale, 1)
