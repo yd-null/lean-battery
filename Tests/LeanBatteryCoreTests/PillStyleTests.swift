@@ -7,8 +7,8 @@ import Testing
 		#expect(metrics.height == 46)
 		#expect(metrics.minimumWidth == 240)
 		#expect(metrics.maximumWidth == 400)
-		#expect(metrics.iconWidth == 16)
-		#expect(metrics.iconHeight == 20)
+		#expect(metrics.iconWidth == 18)
+		#expect(metrics.iconHeight == 18)
 		#expect(metrics.titleFontSize == 13)
 		#expect(metrics.detailFontSize == 11.5)
 		#expect(metrics.horizontalPadding == 22)
@@ -23,26 +23,27 @@ import Testing
 		let large = PillMetrics(style: .large)
 		#expect(small.height == 46 * 0.85)
 		#expect(small.titleFontSize == 13 * 0.85)
-		#expect(small.iconHeight == 20 * 0.85)
+		#expect(small.iconHeight == 18 * 0.85)
 		#expect(small.minimumWidth == 240 * 0.85)
 		#expect(large.height == 46 * 1.2)
 		#expect(large.titleFontSize == 13 * 1.2)
-		// Large grows the text and the box but not the glyph: 16 x 20 pt is as large as it renders crisply.
-		#expect(large.iconHeight == 20)
+		// Large grows the text and the box but not the glyph: 18 x 18 pt is as large as it renders crisply.
+		#expect(large.iconHeight == 18)
 		#expect(large.maximumWidth == 400 * 1.2)
 	}
 
 	@Test func iconIsNeverDrawnLargerThanTheGlyphIsRendered() {
-		// IconRenderer draws 16 x 20 pt at 1x and 2x; anything wider is an upscale of that bitmap.
+		// IconRenderer draws 18 x 18 pt at 1x and 2x; anything wider is an upscale of that bitmap.
 		for style in PillStyle.allCases {
-			#expect(PillMetrics(style: style).iconWidth <= 16)
+			#expect(PillMetrics(style: style).iconWidth <= 18)
+			#expect(PillMetrics(style: style).iconHeight <= 18)
 		}
 	}
 
-	@Test func iconKeepsItsSixteenToTwentyAspectAtEverySize() {
+	@Test func iconKeepsItsSquareAspectAtEverySize() {
 		for style in PillStyle.allCases {
 			let metrics = PillMetrics(style: style)
-			#expect(abs(metrics.iconWidth / metrics.iconHeight - 16.0 / 20.0) < 0.000001)
+			#expect(metrics.iconWidth == metrics.iconHeight)
 		}
 	}
 

@@ -1,6 +1,6 @@
 # Menubar Icon
 
-LeanBattery's menubar item in this fork is an upright battery, 16 × 20 pt, with two top terminals. Core Graphics draws the outline, translucent fill and plug; Core Text draws the percentage. The app renders these into 1× and 2× images for macOS, rather than loading a fixed icon asset.
+LeanBattery's menubar item in this fork is an upright battery, 18 × 18 pt, with two 3.5 × 1.8 pt top terminals. Core Graphics draws the outline, translucent fill and plug; Core Text draws the percentage. The app renders these into 1× and 2× images for macOS, rather than loading a fixed icon asset.
 
 ## States
 
@@ -13,11 +13,11 @@ LeanBattery's menubar item in this fork is an upright battery, 16 × 20 pt, with
 | Temperature ≥ threshold | unchanged | unchanged + red dot top-right |
 | No battery data (desktop Mac, or before macOS reports power at login) | "—" text instead of the battery | — |
 
-The fill is translucent and the % or plug is always drawn in one solid color (white on a dark menubar, black on a light one) on top of it, so digits stay whole and readable at any charge level. Digits use SF semibold condensed to make use of the wider 13.3pt interior. Text-layout tests verify that all percentages from 0 through 100 fit horizontally and vertically.
+The fill is translucent and the % or plug is always drawn in one solid color (white on a dark menubar, black on a light one) on top of it, so digits stay whole and readable at any charge level. Digits use SF semibold condensed to make use of the wider 15.3pt interior. Text-layout tests verify that all percentages from 0 through 100 fit horizontally and vertically.
 
 ## Sample images
 
-`docs/assets/menubar-*.png` are transparent 128 × 160 px renders (8× the 16 × 20 pt icon) for use in the README or on the web. Each stage has a dark-menubar version (white outline) and a `-light` version (black outline) for light backgrounds.
+`docs/assets/menubar-*.png` are transparent 144 × 144 px renders (8× the 18 × 18 pt icon) for use in the README or on the web. Each stage has a dark-menubar version (white outline) and a `-light` version (black outline) for light backgrounds.
 
 | Stage | Dark background | Light background |
 |---|---|---|

@@ -39,7 +39,7 @@ public struct IconSpec: Equatable, Sendable {
 		showsHotBadge = state.isHot
 	}
 
-	/// Point size of the number glyph; smaller for three digits so "100" fits the 13.3pt interior.
+	/// Point size of the number glyph; smaller for three digits so "100" fits the 15.3pt interior.
 	public var numberFontSize: Double {
 		glyph == .number(100) ? 8.0 : 10.0
 	}

@@ -3,7 +3,7 @@
 
 > **A battery indicator that doesn't hog your menubar.**
 >
-> A native macOS menubar app that shows battery level and charging state in a 16-point-wide upright battery, with a popover for per-app energy use and battery health.
+> A native macOS menubar app that shows battery level and charging state in an 18-point-wide upright battery, with a popover for per-app energy use and battery health.
 >
 > **<0.1% CPU and 0 idle wakeups** while it sits in your menubar. Measured, not claimed — [see the numbers](#efficiency-measured).
 
@@ -17,7 +17,7 @@
 
 ## Wider-icon fork
 
-This fork changes the battery artwork from 11 × 22 pt to **16 × 20 pt**, with two top terminals instead of a single cap. The shorter icon sits closer to other menubar icons in height. Percentages use 10 pt SF semibold condensed, or 8 pt for `100`, up from 9 pt and 6.6 pt in the earlier 14 × 22 pt version. Every percentage from 0 through 100 is checked against the 13.3 pt drawing interior. Notification battery icons keep the same proportions.
+This fork changes the battery artwork from 11 × 22 pt to **18 × 18 pt**, with two 3.5 × 1.8 pt top terminals instead of a single cap. The shorter icon sits closer to other menubar icons in height. Percentages use 10 pt SF semibold condensed, or 8 pt for `100`. Every percentage from 0 through 100 is checked against the 15.3 pt drawing interior. Notification battery icons keep the same proportions.
 
 The monitoring logic, permissions and update checker are unchanged. Update notices still refer to upstream releases, not builds of this fork. The performance measurements below are upstream's measurements; they have not been repeated for this fork.
 
@@ -41,7 +41,7 @@ Or [download the latest zip](https://github.com/manustays/lean-battery/releases/
 
 The macOS battery icon with a percentage is wide, and on a notched MacBook menubar space is scarce. Many third-party battery apps are wider still, and many poll the system constantly.
 
-**LeanBattery** turns the battery upright: the charge level, charging plug, Low Power Mode and a high-temperature warning all fit in a 16-point-wide icon. It does no polling for battery state — it redraws only when macOS reports a change.
+**LeanBattery** turns the battery upright: the charge level, charging plug, Low Power Mode and a high-temperature warning all fit in an 18-point-wide icon. It does no polling for battery state — it redraws only when macOS reports a change.
 
 ## Efficiency, measured
 
@@ -81,7 +81,7 @@ Numbers are one machine and one configuration; yours will differ. The full metho
 
 **In the menubar (available now)**
 
-- **Upright battery icon, 16 × 20 pt** with two top terminals and the charge % inside.
+- **Upright battery icon, 18 × 18 pt** with two top terminals and the charge % inside.
 - **Charging at a glance** — a plug replaces the number while on power; green fill while charging.
 - **Low Power Mode** shown as a yellow fill; **low battery** (≤ 20%) as red.
 - **High-temperature badge** — a red dot when the battery reaches your threshold (default 40 °C).

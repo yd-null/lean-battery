@@ -5,16 +5,16 @@ import Foundation
 /// Draws the upright battery icon (spec §4.1) into a transparent bitmap.
 public enum IconRenderer {
 	/// Icon canvas in points.
-	public static let size = CGSize(width: 16, height: 20)
+	public static let size = CGSize(width: 18, height: 18)
 
 	private static let terminals = [
-		CGRect(x: 3.0, y: 0.4, width: 3.0, height: 1.6),
-		CGRect(x: 10.0, y: 0.4, width: 3.0, height: 1.6),
+		CGRect(x: 3.25, y: 0.4, width: 3.5, height: 1.8),
+		CGRect(x: 11.25, y: 0.4, width: 3.5, height: 1.8),
 	]
-	private static let body = CGRect(x: 0.45, y: 2.2, width: 15.1, height: 17.4)
+	private static let body = CGRect(x: 0.45, y: 2.4, width: 17.1, height: 15.2)
 	private static let bodyStrokeWidth = 0.9
-	static let inner = CGRect(x: 1.35, y: 3.1, width: 13.3, height: 15.6)
-	private static let badgeCenter = CGPoint(x: 13.9, y: 2.3)
+	static let inner = CGRect(x: 1.35, y: 3.3, width: 15.3, height: 13.4)
+	private static let badgeCenter = CGPoint(x: 15.9, y: 2.5)
 	/// Fill opacities: soft enough that a solid glyph drawn on top stays readable.
 	private static let foregroundFillAlpha = 0.28
 	private static let colorFillAlpha = 0.6
@@ -41,7 +41,7 @@ public enum IconRenderer {
 		return context.makeImage()
 	}
 
-	/// Draws into a context whose user space is 16 × 20 pt with a top-left origin.
+	/// Draws into a context whose user space is 18 × 18 pt with a top-left origin.
 	static func draw(_ spec: IconSpec, foreground: CGColor, in context: CGContext) {
 		context.setFillColor(foreground)
 		for terminal in terminals {
